@@ -22,6 +22,7 @@ public class MainController {
     @FXML private Label      labelRole;
     @FXML private Label      labelPageCourante;
     @FXML private VBox       menuCoachs;
+    @FXML private VBox menuUtilisateurs;  // dans le FXML : fx:id="menuUtilisateurs"
 
     private String username;
     private String role;
@@ -41,6 +42,13 @@ public class MainController {
             menuCoachs.setManaged(false);
         }
 
+        if (!role.equals("ADMIN")) {
+            menuCoachs.setVisible(false);
+            menuCoachs.setManaged(false);
+            menuUtilisateurs.setVisible(false);   // ← AJOUTER
+            menuUtilisateurs.setManaged(false);   // ← AJOUTER
+        }
+
         allerMembres();
     }
 
@@ -49,6 +57,11 @@ public class MainController {
     @FXML
     public void allerMembres() {
         chargerPage(BASE + "membres.fxml", "👤 Gestion des Membres");
+    }
+
+    @FXML
+    public void allerUtilisateurs() {
+        chargerPage(BASE + "utilisateurs.fxml", "🔐 Gestion des Utilisateurs");
     }
 
     @FXML

@@ -61,6 +61,17 @@
                            style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
                 </VBox>
 
+                <!-- Utilisateurs — admin seulement -->
+                <VBox fx:id="menuUtilisateurs"
+                      onMouseClicked="#allerUtilisateurs"
+                      style="-fx-padding: 11 14; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <Label text="🔐  Utilisateurs"
+                           style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
+                </VBox>
+
+
+
+
             </VBox>
 
             <!-- Déconnexion -->

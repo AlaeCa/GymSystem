@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="14"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ma.ac.esi.gymsystem.controller.UtilisateurController"
+      style="-fx-padding: 20; -fx-background-color: #0d1117;">
+
+    <!-- ===== TITRE + COMPTEUR ADMINS ===== -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="🔐 Gestion des Utilisateurs"
+               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #00d4ff;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="labelNbAdmins" text="👑 Admins actifs : ..."
+               style="-fx-text-fill: #4caf50; -fx-font-size: 12px;
+                      -fx-background-color: #1a2a1a; -fx-padding: 6 12;
+                      -fx-background-radius: 20;"/>
+    </HBox>
+
+    <!-- Avertissement visible -->
+    <Label text="⚠️  Accessible uniquement aux administrateurs. La suppression du dernier admin est bloquée automatiquement."
+           style="-fx-text-fill: #ff9800; -fx-font-size: 11px;
+                  -fx-background-color: #1a1500; -fx-padding: 8 12;
+                  -fx-background-radius: 6; -fx-wrap-text: true;"/>
+
+    <!-- ===== FORMULAIRE ===== -->
+    <GridPane hgap="14" vgap="10"
+              style="-fx-background-color: #161b22; -fx-padding: 16;
+                     -fx-border-color: #1e2d3d; -fx-border-radius: 10;
+                     -fx-background-radius: 10;">
+
+        <!-- Ligne 1 : Nom + Username -->
+        <Label text="Nom complet *"
+               style="-fx-text-fill: #8090a0; -fx-font-size: 11px;"
+               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="champNom" promptText="Nom complet"
+                   style="-fx-background-color: #0d1117; -fx-text-fill: #e0f0ff;
+                          -fx-border-color: #1e2d3d; -fx-border-radius: 6;
+                          -fx-background-radius: 6; -fx-padding: 8 12; -fx-pref-height: 36px;"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="180"/>
+
+        <Label text="Identifiant *"
+               style="-fx-text-fill: #8090a0; -fx-font-size: 11px;"
+               GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="champUsername" promptText="username"
+                   style="-fx-background-color: #0d1117; -fx-text-fill: #e0f0ff;
+                          -fx-border-color: #1e2d3d; -fx-border-radius: 6;
+                          -fx-background-radius: 6; -fx-padding: 8 12; -fx-pref-height: 36px;"
+                   GridPane.rowIndex="0" GridPane.columnIndex="3" prefWidth="180"/>
+
+        <!-- Ligne 2 : Mot de passe + Rôle -->
+        <Label text="Mot de passe"
+               style="-fx-text-fill: #8090a0; -fx-font-size: 11px;"
+               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="champPassword" promptText="Laisser vide = inchangé"
+                       style="-fx-background-color: #0d1117; -fx-text-fill: #e0f0ff;
+                              -fx-border-color: #1e2d3d; -fx-border-radius: 6;
+                              -fx-background-radius: 6; -fx-padding: 8 12; -fx-pref-height: 36px;"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Rôle *"
+               style="-fx-text-fill: #8090a0; -fx-font-size: 11px;"
+               GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="comboRole" prefWidth="180" prefHeight="36"
+                  style="-fx-background-color: #0d1117; -fx-border-color: #1e2d3d;
+                         -fx-border-radius: 6; -fx-background-radius: 6;"
+                  GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <!-- Ligne 3 : Actif -->
+        <Label text="Statut"
+               style="-fx-text-fill: #8090a0; -fx-font-size: 11px;"
+               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="checkActif" text="Compte actif"
+                  selected="true"
+                  style="-fx-text-fill: #c8d8e8;"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <!-- ===== BOUTONS ===== -->
+    <HBox spacing="10">
+        <Button text="➕ Ajouter"
+                onAction="#ajouterUtilisateur"
+                style="-fx-background-color: #1b5e20; -fx-text-fill: #a5d6a7;
+                       -fx-background-radius: 20; -fx-padding: 7 18;
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        <Button text="✏️ Modifier"
+                onAction="#modifierUtilisateur"
+                style="-fx-background-color: #0d47a1; -fx-text-fill: #90caf9;
+                       -fx-background-radius: 20; -fx-padding: 7 18;
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        <Button text="🗑️ Supprimer"
+                onAction="#supprimerUtilisateur"
+                style="-fx-background-color: #b71c1c; -fx-text-fill: #ef9a9a;
+                       -fx-background-radius: 20; -fx-padding: 7 18;
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        <Button text="🔄 Actualiser"
+                onAction="#chargerUtilisateurs"
+                style="-fx-background-color: #37474f; -fx-text-fill: #b0bec5;
+                       -fx-background-radius: 20; -fx-padding: 7 18;
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        <Button text="🧹 Vider"
+                onAction="#viderChamps"
+                style="-fx-background-color: #37474f; -fx-text-fill: #b0bec5;
+                       -fx-background-radius: 20; -fx-padding: 7 18;
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"/>
+    </HBox>
+
+    <!-- ===== LABEL STATUT ===== -->
+    <Label fx:id="labelStatut" text="Prêt."
+           style="-fx-text-fill: #80cbc4; -fx-font-size: 12px; -fx-font-style: italic;"/>
+
+    <!-- ===== TABLEAU ===== -->
+    <TableView fx:id="tableUtilisateurs" VBox.vgrow="ALWAYS"
+               style="-fx-background-color: #161b22; -fx-border-color: #0f3460;
+                      -fx-border-radius: 8; -fx-background-radius: 8;">
+        <columns>
+            <TableColumn fx:id="colId"       text="ID"          prefWidth="50"/>
+            <TableColumn fx:id="colNom"      text="Nom"         prefWidth="160"/>
+            <TableColumn fx:id="colUsername" text="Identifiant" prefWidth="160"/>
+            <TableColumn fx:id="colRole"     text="Rôle"        prefWidth="160"/>
+            <TableColumn fx:id="colActif"    text="Statut"      prefWidth="120"/>
+        </columns>
+        <placeholder>
+            <Label text="Aucun utilisateur trouvé."
+                   style="-fx-text-fill: #506070;"/>
+        </placeholder>
+    </TableView>
+</VBox>

@@ -56,18 +56,14 @@ public class LoginController {
 
     private void ouvrirDashboard(String username, String role) {
         try {
-            // ✅ CHEMIN CORRECT pour projet Maven avec package ma.ac.esi.gymsystem
+
             URL fxmlUrl = getClass().getResource(
                     "/ma/ac/esi/gymsystem/view/main.fxml"
             );
 
-            if (fxmlUrl == null) {
-                labelErreur.setText("main.fxml introuvable !");
-                System.err.println("ERREUR : /ma/ac/esi/gymsystem/view/main.fxml non trouvé");
-                return;
-            }
 
-            System.out.println("main.fxml trouvé : " + fxmlUrl);
+
+
 
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
@@ -82,9 +78,7 @@ public class LoginController {
 
             // Charger le CSS
             URL cssUrl = getClass().getResource("/ma/ac/esi/gymsystem/style.css");
-            if (cssUrl != null) {
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-            }
+
 
             stage.setScene(scene);
             stage.setTitle("GymManager — " + username);
