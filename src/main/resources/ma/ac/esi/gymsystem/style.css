@@ -1,0 +1,188 @@
+/* ============================================
+   GymManager - Feuille de style moderne
+   Thème sombre avec accents énergiques
+   ============================================ */
+
+/* ---- Fond général de l'application ---- */
+.root {
+    -fx-background-color: #1a1a2e;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* ---- Titre de page ---- */
+.titre-page {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00d4ff;
+    -fx-padding: 0 0 10 0;
+}
+
+/* ---- Formulaire (fond légèrement plus clair) ---- */
+.formulaire {
+    -fx-background-color: #16213e;
+    -fx-background-radius: 10;
+    -fx-border-color: #0f3460;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+/* ---- Labels dans les formulaires ---- */
+Label {
+    -fx-text-fill: #b0b8c8;
+    -fx-font-size: 13px;
+}
+
+/* ---- Champs de saisie ---- */
+TextField, DatePicker, ComboBox {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #e0e0e0;
+    -fx-border-color: #1a4a8a;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10 6 10;
+    -fx-pref-height: 34px;
+}
+
+TextField:focused, DatePicker:focused, ComboBox:focused {
+    -fx-border-color: #00d4ff;
+    -fx-effect: dropshadow(gaussian, #00d4ff44, 8, 0.3, 0, 0);
+}
+
+/* ---- Tableau ---- */
+TableView {
+    -fx-background-color: #16213e;
+    -fx-border-color: #0f3460;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+TableView .column-header {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #00d4ff;
+    -fx-font-weight: bold;
+    -fx-padding: 8;
+}
+
+TableView .table-row-cell {
+    -fx-background-color: #1a1a2e;
+    -fx-border-color: transparent;
+}
+
+TableView .table-row-cell:odd {
+    -fx-background-color: #16213e;
+}
+
+TableView .table-row-cell:selected {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #00d4ff;
+}
+
+TableView .table-row-cell:hover {
+    -fx-background-color: #1e3a5f;
+}
+
+TableCell {
+    -fx-text-fill: #d0d8e8;
+    -fx-padding: 6 10 6 10;
+}
+
+/* ---- Onglets ---- */
+TabPane {
+    -fx-background-color: transparent;
+    -fx-tab-min-width: 160px;
+}
+
+Tab {
+    -fx-background-color: #0f3460;
+}
+
+Tab:selected {
+    -fx-background-color: #00d4ff;
+}
+
+.tab-label {
+    -fx-text-fill: #b0b8c8;
+    -fx-font-weight: bold;
+}
+
+Tab:selected .tab-label {
+    -fx-text-fill: #1a1a2e;
+}
+
+/* ======== BOUTONS ======== */
+
+/* Style de base de tous les boutons */
+Button {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 7 18 7 18;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+/* Bouton vert (Ajouter) */
+.btn-vert {
+    -fx-background-color: #1b5e20;
+    -fx-text-fill: #a5d6a7;
+}
+.btn-vert:hover {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #4caf5066, 8, 0.4, 0, 0);
+}
+
+/* Bouton bleu (Modifier) */
+.btn-bleu {
+    -fx-background-color: #0d47a1;
+    -fx-text-fill: #90caf9;
+}
+.btn-bleu:hover {
+    -fx-background-color: #1565c0;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #2196f366, 8, 0.4, 0, 0);
+}
+
+/* Bouton rouge (Supprimer) */
+.btn-rouge {
+    -fx-background-color: #b71c1c;
+    -fx-text-fill: #ef9a9a;
+}
+.btn-rouge:hover {
+    -fx-background-color: #c62828;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #f4433666, 8, 0.4, 0, 0);
+}
+
+/* Bouton gris (Actions secondaires) */
+.btn-gris {
+    -fx-background-color: #37474f;
+    -fx-text-fill: #b0bec5;
+}
+.btn-gris:hover {
+    -fx-background-color: #455a64;
+    -fx-text-fill: #ffffff;
+}
+
+/* ---- Label de statut ---- */
+.label-statut {
+    -fx-font-size: 12px;
+    -fx-text-fill: #80cbc4;
+    -fx-padding: 3 0 3 0;
+    -fx-font-style: italic;
+}
+
+/* ---- ScrollBar ---- */
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #16213e;
+}

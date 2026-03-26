@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" stylesheets="@../style.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ma.ac.esi.gymsystem.controller.SalleCoursController">
+
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <Label text="🏠 Salles &amp; Planning des Cours" styleClass="titre-page"/>
+
+    <TabPane>
+
+        <!-- ===================== ONGLET SALLES ===================== -->
+        <Tab text="🏠 Salles" closable="false">
+            <VBox spacing="12" style="-fx-padding: 15;">
+                <GridPane hgap="10" vgap="10" styleClass="formulaire">
+                    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                    <Label text="Nom *"         GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="champNomSalle" promptText="Nom de la salle"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Capacité *"    GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                    <TextField fx:id="champCapacite" promptText="Ex: 30"
+                               GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                    <Label text="Description"  GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="champDescriptionSalle" promptText="Description..."
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               GridPane.columnSpan="3" prefWidth="350"/>
+                </GridPane>
+                <HBox spacing="10">
+                    <Button text="Ajouter"    onAction="#ajouterSalle"   styleClass="btn-vert"/>
+                    <Button text="Modifier"   onAction="#modifierSalle"  styleClass="btn-bleu"/>
+                    <Button text="Supprimer"  onAction="#supprimerSalle" styleClass="btn-rouge"/>
+                    <Button text="Actualiser" onAction="#chargerSalles"  styleClass="btn-gris"/>
+                    <Button text="Vider"      onAction="#viderChampsSalle" styleClass="btn-gris"/>
+                </HBox>
+                <Label fx:id="labelStatutSalle" text="Prêt." styleClass="label-statut"/>
+                <TableView fx:id="tableSalles" prefHeight="250">
+                    <columns>
+                        <TableColumn fx:id="colSalleId"       text="ID"          prefWidth="60"/>
+                        <TableColumn fx:id="colSalleNom"      text="Nom"         prefWidth="150"/>
+                        <TableColumn fx:id="colSalleCapacite" text="Capacité"    prefWidth="100"/>
+                        <TableColumn fx:id="colSalleDesc"     text="Description" prefWidth="300"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+
+        <!-- ===================== ONGLET COURS ===================== -->
+        <Tab text="📅 Planning des Cours" closable="false">
+            <VBox spacing="12" style="-fx-padding: 15;">
+                <GridPane hgap="10" vgap="10" styleClass="formulaire">
+                    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                    <Label text="Cours *"         GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="champNomCours" promptText="Nom du cours"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Durée (min) *"   GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                    <TextField fx:id="champDuree" promptText="Ex: 60"
+                               GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                    <Label text="Horaire *"       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="champHoraire" promptText="2025-06-10T08:00"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Coach *"         GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                    <ComboBox fx:id="comboCoachs" prefWidth="180"
+                              GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                    <Label text="Salle *"         GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="comboSalles" prefWidth="180"
+                              GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+                <HBox spacing="10">
+                    <Button text="Ajouter"    onAction="#ajouterCours"   styleClass="btn-vert"/>
+                    <Button text="Supprimer"  onAction="#supprimerCours" styleClass="btn-rouge"/>
+                    <Button text="Actualiser" onAction="#chargerCours"   styleClass="btn-gris"/>
+                    <Button text="Vider"      onAction="#viderChampsCours" styleClass="btn-gris"/>
+                </HBox>
+                <Label fx:id="labelStatutCours" text="Prêt." styleClass="label-statut"/>
+                <TableView fx:id="tableCours" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colCoursId"      text="ID"       prefWidth="50"/>
+                        <TableColumn fx:id="colCoursNom"     text="Cours"    prefWidth="150"/>
+                        <TableColumn fx:id="colCoursHoraire" text="Horaire"  prefWidth="140"/>
+                        <TableColumn fx:id="colCoursDuree"   text="Durée"    prefWidth="80"/>
+                        <TableColumn fx:id="colCoursCoach"   text="Coach"    prefWidth="150"/>
+                        <TableColumn fx:id="colCoursSalle"   text="Salle"    prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>
