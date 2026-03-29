@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:id="rootLayout"
+            fx:controller="ma.ac.esi.gymsystem.controller.MainController"
+            prefWidth="1200" prefHeight="700"
+            style="-fx-background-color: #0d1117;">
+
+    <!-- ===== SIDEBAR ===== -->
+    <left>
+        <VBox prefWidth="210" spacing="0"
+              style="-fx-background-color: #0d1117;
+                     -fx-border-color: transparent #1e2d3d transparent transparent;
+                     -fx-border-width: 1;">
+
+            <!-- Logo -->
+            <Label text="💪 GymManager"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;
+                          -fx-text-fill: #00d4ff; -fx-padding: 25 20 10 20;"/>
+
+            <!-- Infos utilisateur -->
+            <VBox spacing="4"
+                  style="-fx-padding: 10 20 15 20;
+                         -fx-border-color: transparent transparent #1e2d3d transparent;
+                         -fx-border-width: 1;">
+                <Label fx:id="labelNomUtilisateur" text="..."
+                       style="-fx-text-fill: #c8d8e8; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <Label fx:id="labelRole" text="..."
+                       style="-fx-text-fill: #4a6080; -fx-font-size: 11px;"/>
+            </VBox>
+
+            <Label text="NAVIGATION"
+                   style="-fx-text-fill: #2a3a4a; -fx-font-size: 10px;
+                          -fx-font-weight: bold; -fx-padding: 14 20 6 20;"/>
+
+            <!-- Menu items — onMouseClicked pointe vers méthodes du MainController -->
+            <VBox VBox.vgrow="ALWAYS" spacing="3" style="-fx-padding: 0 10;">
+
+                <!-- Membres -->
+                <VBox onMouseClicked="#allerMembres"
+                      style="-fx-padding: 11 14; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <Label text="👤  Membres"
+                           style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
+                </VBox>
+
+                <!-- Coachs — masqué si pas ADMIN via fx:id="menuCoachs" -->
+                <VBox fx:id="menuCoachs"
+                      onMouseClicked="#allerCoachs"
+                      style="-fx-padding: 11 14; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <Label text="🏋️  Coachs"
+                           style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
+                </VBox>
+
+                <!-- Salles & Cours -->
+                <VBox onMouseClicked="#allerSalles"
+                      style="-fx-padding: 11 14; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <Label text="📅  Salles &amp; Cours"
+                           style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
+                </VBox>
+
+                <!-- Utilisateurs — admin seulement -->
+                <VBox fx:id="menuUtilisateurs"
+                      onMouseClicked="#allerUtilisateurs"
+                      style="-fx-padding: 11 14; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <Label text="🔐  Utilisateurs"
+                           style="-fx-text-fill: #8090a0; -fx-font-size: 13px;"/>
+                </VBox>
+
+
+
+
+            </VBox>
+
+            <!-- Déconnexion -->
+            <VBox onMouseClicked="#seDeconnecter"
+                  style="-fx-padding: 14 20; -fx-cursor: hand;
+                         -fx-border-color: #1e2d3d transparent transparent transparent;
+                         -fx-border-width: 1;">
+                <Label text="🚪  Déconnexion"
+                       style="-fx-text-fill: #ff6b6b; -fx-font-size: 13px;"/>
+            </VBox>
+
+        </VBox>
+    </left>
+
+    <!-- ===== HEADER ===== -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              style="-fx-background-color: #0d1117; -fx-padding: 14 20;
+                     -fx-border-color: transparent transparent #1e2d3d transparent;
+                     -fx-border-width: 1;">
+            <Label fx:id="labelPageCourante" text="Bienvenue"
+                   style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #d0e0f0;"/>
+        </HBox>
+    </top>
+
+    <!-- ===== ZONE CONTENU CENTRAL ===== -->
+    <center>
+        <StackPane style="-fx-background-color: #0d1117;"/>
+    </center>
+
+</BorderPane>

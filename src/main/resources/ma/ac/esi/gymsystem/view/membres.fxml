@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" stylesheets="@../style.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ma.ac.esi.gymsystem.controller.MembreController">
+
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <!-- Titre -->
+    <Label text="👤 Gestion des Membres" styleClass="titre-page"/>
+
+    <!-- Formulaire -->
+    <GridPane hgap="10" vgap="10" styleClass="formulaire">
+        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+        <Label text="Nom *"       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="champNom" promptText="Nom de famille"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Prénom *"    GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="champPrenom" promptText="Prénom"
+                   GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Email *"     GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="champEmail" promptText="email@exemple.com"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Téléphone"   GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="champTelephone" promptText="0612345678"
+                   GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Label text="Date début *" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="champDateDebut"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Date fin *"   GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <DatePicker fx:id="champDateFin"
+                    GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+    </GridPane>
+
+    <!-- Boutons d'action -->
+    <HBox spacing="10">
+        <Button text="Ajouter"    onAction="#ajouterMembre"   styleClass="btn-vert"/>
+        <Button text="Modifier"   onAction="#modifierMembre"  styleClass="btn-bleu"/>
+        <Button text="Supprimer"  onAction="#supprimerMembre" styleClass="btn-rouge"/>
+        <Button text="Actualiser" onAction="#chargerMembres"  styleClass="btn-gris"/>
+        <Button text="Vider"      onAction="#viderChamps"     styleClass="btn-gris"/>
+        <MenuButton text="Rechercher par..." styleClass="btn-jaune">
+            <items>
+                <MenuItem text="Par Nom"        onAction="#choisirRechercheNom"/>
+                <MenuItem text="Par Prénom"     onAction="#choisirRecherchePrenom"/>
+                <MenuItem text="Par Abonnement" onAction="#choisirRechercheAbonnement"/>
+            </items>
+        </MenuButton>
+
+        <TextField fx:id="champRecherche" promptText="Saisir..." visible="false" managed="false"/>
+
+        <Button fx:id="btnLancerRecherche" text="OK" onAction="#rechercherMembres"
+                styleClass="btn-ok" visible="false" managed="false"/>
+    </HBox>
+
+    <!-- Label de statut -->
+    <Label fx:id="labelStatut" text="Prêt." styleClass="label-statut"/>
+
+    <!-- Tableau des membres -->
+    <TableView fx:id="tableMembres" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId"        text="ID"          prefWidth="50"/>
+            <TableColumn fx:id="colNom"       text="Nom"         prefWidth="120"/>
+            <TableColumn fx:id="colPrenom"    text="Prénom"      prefWidth="120"/>
+            <TableColumn fx:id="colEmail"     text="Email"       prefWidth="200"/>
+            <TableColumn fx:id="colTelephone" text="Téléphone"   prefWidth="120"/>
+            <TableColumn fx:id="colDateFin"   text="Date Fin"    prefWidth="110"/>
+            <TableColumn fx:id="colStatut"    text="Abonnement"  prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

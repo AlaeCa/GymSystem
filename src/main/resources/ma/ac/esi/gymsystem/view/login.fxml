@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="ma.ac.esi.gymsystem.controller.LoginController"
+           stylesheets="@../style.css"
+           style="-fx-background-color: #0d1117;">
+
+    <VBox alignment="CENTER" spacing="20"
+          maxWidth="400"
+          style="-fx-background-color: #161b22;
+                 -fx-background-radius: 14;
+                 -fx-border-color: #1e2d3d;
+                 -fx-border-radius: 14;
+                 -fx-padding: 40;
+                 -fx-effect: dropshadow(gaussian,#000000aa,20,0.3,0,6);">
+
+        <!-- Logo + Titre -->
+        <Label text="💪" style="-fx-font-size: 44px;"/>
+        <Label text="GymManager"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #00d4ff;"/>
+        <Label text="Connectez-vous pour continuer"
+               style="-fx-text-fill: #506070; -fx-font-size: 12px;"/>
+
+        <Separator style="-fx-background-color: #1e2d3d;"/>
+
+        <!-- Champ Username -->
+        <VBox spacing="5">
+            <Label text="Nom d'utilisateur"
+                   style="-fx-text-fill: #8090a0; -fx-font-size: 12px;"/>
+            <TextField fx:id="champUsername"
+                       promptText="Ex: admin"
+                       style="-fx-background-color: #0d1117; -fx-text-fill: #e0f0ff;
+                              -fx-border-color: #1e2d3d; -fx-border-radius: 8;
+                              -fx-background-radius: 8; -fx-padding: 10; -fx-pref-height: 40px;"/>
+        </VBox>
+
+        <!-- Champ Password -->
+        <VBox spacing="5">
+            <Label text="Mot de passe"
+                   style="-fx-text-fill: #8090a0; -fx-font-size: 12px;"/>
+            <PasswordField fx:id="champPassword"
+                           promptText="••••••••"
+                           style="-fx-background-color: #0d1117; -fx-text-fill: #e0f0ff;
+                                  -fx-border-color: #1e2d3d; -fx-border-radius: 8;
+                                  -fx-background-radius: 8; -fx-padding: 10; -fx-pref-height: 40px;"/>
+        </VBox>
+
+        <!-- Message d'erreur -->
+        <Label fx:id="labelErreur" text=""
+               style="-fx-text-fill: #ff6b6b; -fx-font-size: 12px;
+                      -fx-background-color: #ff000018; -fx-padding: 8 12;
+                      -fx-background-radius: 6; -fx-wrap-text: true;"
+               maxWidth="320"/>
+
+        <!-- Bouton connexion -->
+        <Button text="🔐  Se connecter"
+                onAction="#seConnecter"
+                maxWidth="Infinity"
+                style="-fx-background-color: linear-gradient(to right,#0077aa,#00d4ff);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;
+                       -fx-background-radius: 10; -fx-padding: 12 0;
+                       -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        <!-- Comptes de test -->
+        <Label text="Test → admin / admin123  |  coach1 / coach123"
+               style="-fx-text-fill: #2a3a4a; -fx-font-size: 10px;"/>
+    </VBox>
+</StackPane>
