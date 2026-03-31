@@ -11,45 +11,24 @@ import java.util.List;
  * @author LENOVO
  **/
 public class MembreDAO {
-    private Connection conn = DBConnection.getConnection();
-
-    // --- UTILITAIRE : MAPPER LE RESULTSET EN OBJET MEMBRE ---
-    // Centralise la lecture des colonnes pour éviter les erreurs et les répétitions
-    private Membre mapResultSetToMembre(ResultSet rs) throws SQLException {
-        Membre m = new Membre();
-        m.setId(rs.getInt("id"));
-        m.setNom(rs.getString("nom"));
-        m.setPrenom(rs.getString("prenom"));
-        m.setEmail(rs.getString("email"));
-        m.setTelephone(rs.getString("telephone"));
-
-        // Conversion des dates SQL vers LocalDate
-        Date dateDeb = rs.getDate("date_debut");
-        if (dateDeb != null) m.setDateDebut(dateDeb.toLocalDate());
-
-        Date dateF = rs.getDate("date_fin");
-        if (dateF != null) m.setDateFin(dateF.toLocalDate());
-
-        m.setActif(rs.getBoolean("actif"));
-        return m;
-    }
+    Connection conn = DBConnection.getConnection();
 
     // ---- CREATE ----
     public void ajouterMembre(Membre m) throws SQLException {
         String sql = "INSERT INTO membres (nom, prenom, email, telephone, date_debut, date_fin, actif) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, m.getNom());
-            ps.setString(2, m.getPrenom());
-            ps.setString(3, m.getEmail());
-            ps.setString(4, m.getTelephone());
-            ps.setDate(5, Date.valueOf(m.getDateDebut()));
-            ps.setDate(6, Date.valueOf(m.getDateFin()));
-            ps.setBoolean(7, m.isActif());
-            ps.executeUpdate();
-            System.out.println("Membre ajouté : " + m.getPrenom() + " " + m.getNom());
-        }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, m.getNom());
+        ps.setString(2, m.getPrenom());
+        ps.setString(3, m.getEmail());
+        ps.setString(4, m.getTelephone());
+        ps.setDate(5, Date.valueOf(m.getDateDebut()));
+        ps.setDate(6, Date.valueOf(m.getDateFin()));
+        ps.setBoolean(7, m.isActif());
+        ps.executeUpdate();
+        ps.close();
+        System.out.println("Membre ajouté : " + m.getPrenom() + " " + m.getNom());
     }
 
     // ---- READ ALL ----
@@ -57,27 +36,49 @@ public class MembreDAO {
         List<Membre> liste = new ArrayList<>();
         String sql = "SELECT * FROM membres";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                liste.add(mapResultSetToMembre(rs));
-            }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Membre m = new Membre();
+            m.setId(rs.getInt("id"));
+            m.setNom(rs.getString("nom"));
+            m.setPrenom(rs.getString("prenom"));
+            m.setEmail(rs.getString("email"));
+            m.setTelephone(rs.getString("telephone"));
+            m.setDateDebut(rs.getDate("date_debut").toLocalDate());
+            m.setDateFin(rs.getDate("date_fin").toLocalDate());
+            m.setActif(rs.getBoolean("actif"));
+            liste.add(m);
         }
+        rs.close();
+        ps.close();
         return liste;
     }
 
     // ---- READ ONE ----
     public Membre getMembreParId(int id) throws SQLException {
         String sql = "SELECT * FROM membres WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToMembre(rs);
-                }
-            }
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        Membre m = null;
+        if (rs.next()) {
+            m = new Membre();
+            m.setId(rs.getInt("id"));
+            m.setNom(rs.getString("nom"));
+            m.setPrenom(rs.getString("prenom"));
+            m.setEmail(rs.getString("email"));
+            m.setTelephone(rs.getString("telephone"));
+            m.setDateDebut(rs.getDate("date_debut").toLocalDate());
+            m.setDateFin(rs.getDate("date_fin").toLocalDate());
+            m.setActif(rs.getBoolean("actif"));
         }
-        return null;
+        rs.close();
+        ps.close();
+        return m;
     }
 
     // ---- UPDATE ----
@@ -85,74 +86,95 @@ public class MembreDAO {
         String sql = "UPDATE membres SET nom=?, prenom=?, email=?, telephone=?, "
                 + "date_debut=?, date_fin=?, actif=? WHERE id=?";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, m.getNom());
-            ps.setString(2, m.getPrenom());
-            ps.setString(3, m.getEmail());
-            ps.setString(4, m.getTelephone());
-            ps.setDate(5, Date.valueOf(m.getDateDebut()));
-            ps.setDate(6, Date.valueOf(m.getDateFin()));
-            ps.setBoolean(7, m.isActif());
-            ps.setInt(8, m.getId());
-            ps.executeUpdate();
-        }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, m.getNom());
+        ps.setString(2, m.getPrenom());
+        ps.setString(3, m.getEmail());
+        ps.setString(4, m.getTelephone());
+        ps.setDate(5, Date.valueOf(m.getDateDebut()));
+        ps.setDate(6, Date.valueOf(m.getDateFin()));
+        ps.setBoolean(7, m.isActif());
+        ps.setInt(8, m.getId());
+        ps.executeUpdate();
+        ps.close();
     }
 
     // ---- DELETE ----
     public void supprimerMembre(int id) throws SQLException {
         String sql = "DELETE FROM membres WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.executeUpdate();
+        ps.close();
     }
 
-    // ---- SEARCH BY CRITERIA ----
+    // ---- RECHERCHER (Nouveau) ----
     public List<Membre> rechercherMembreParCritere(String critere, String valeur) throws SQLException {
         List<Membre> liste = new ArrayList<>();
         String sql;
 
+        // Choix de la requête selon le critère
         if (critere.equalsIgnoreCase("Abonnement")) {
-            // Si on cherche les valides, on compare les dates avec aujourd'hui
             if (valeur.toLowerCase().contains("valide")) {
-                sql = "SELECT * FROM membres WHERE date_debut <= CURDATE() AND date_fin >= CURDATE() AND actif = 1";
+                sql = "SELECT * FROM membres WHERE date_fin >= CURDATE() AND actif = 1";
             } else {
-                // Sinon on cherche les expirés
                 sql = "SELECT * FROM membres WHERE date_fin < CURDATE() OR actif = 0";
             }
-            try (PreparedStatement ps = conn.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    liste.add(mapResultSetToMembre(rs));
-                }
-            }
         } else {
-            // Recherche classique (Nom, Prénom)
-            String colonneSql = critere.toLowerCase().equals("prénom") ? "prenom" : "nom";
-            sql = "SELECT * FROM membres WHERE " + colonneSql + " LIKE ?";
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, "%" + valeur + "%");
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        liste.add(mapResultSetToMembre(rs));
-                    }
-                }
-            }
+            // Recherche par Nom ou Prénom
+            String colonne = critere.equalsIgnoreCase("Prénom") ? "prenom" : "nom";
+            sql = "SELECT * FROM membres WHERE " + colonne + " LIKE ?";
         }
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        // Si ce n'est pas une recherche par abonnement, on injecte le mot-clé
+        if (!critere.equalsIgnoreCase("Abonnement")) {
+            ps.setString(1, "%" + valeur + "%");
+        }
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Membre m = new Membre();
+            m.setId(rs.getInt("id"));
+            m.setNom(rs.getString("nom"));
+            m.setPrenom(rs.getString("prenom"));
+            m.setEmail(rs.getString("email"));
+            m.setTelephone(rs.getString("telephone"));
+            m.setDateDebut(rs.getDate("date_debut").toLocalDate());
+            m.setDateFin(rs.getDate("date_fin").toLocalDate());
+            m.setActif(rs.getBoolean("actif"));
+            liste.add(m);
+        }
+
+        rs.close();
+        ps.close();
         return liste;
     }
-    // ---- MEMBRES AVEC ABONNEMENT ACTIF AUJOURD'HUI ----
+
+    // ---- Membres avec abonnement actif aujourd'hui ----
     public List<Membre> getMembresActifs() throws SQLException {
         List<Membre> liste = new ArrayList<>();
-        // Utilisation de CURDATE() pour MySQL (ou SYSDATE pour Oracle)
-        String sql = "SELECT * FROM membres WHERE date_debut <= CURDATE() AND date_fin >= CURDATE() AND actif = 1";
+        String sql = "SELECT * FROM membres WHERE date_debut <= CURDATE() AND date_fin >= CURDATE()";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                liste.add(mapResultSetToMembre(rs));
-            }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Membre m = new Membre();
+            m.setId(rs.getInt("id"));
+            m.setNom(rs.getString("nom"));
+            m.setPrenom(rs.getString("prenom"));
+            m.setEmail(rs.getString("email"));
+            m.setTelephone(rs.getString("telephone"));
+            m.setDateDebut(rs.getDate("date_debut").toLocalDate());
+            m.setDateFin(rs.getDate("date_fin").toLocalDate());
+            m.setActif(rs.getBoolean("actif"));
+            liste.add(m);
         }
+        rs.close();
+        ps.close();
         return liste;
     }
 }

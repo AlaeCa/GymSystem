@@ -1,5 +1,6 @@
 package ma.ac.esi.gymsystem.controller;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,40 +13,42 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * @author LENOVO
- **/
+// PDF
+import ma.ac.esi.gymsystem.util.PdfService;
+import java.awt.Desktop;
+import java.io.File;
+
 public class MembreController {
-    // ---- Liens avec les composants FXML ----
+
+    // ---- FXML ----
     @FXML private TextField champNom;
-    @FXML private TextField    champPrenom;
-    @FXML private TextField    champEmail;
-    @FXML private TextField    champTelephone;
+    @FXML private TextField champPrenom;
+    @FXML private TextField champEmail;
+    @FXML private TextField champTelephone;
     @FXML private DatePicker champDateDebut;
-    @FXML private DatePicker   champDateFin;
+    @FXML private DatePicker champDateFin;
     @FXML private Label labelStatut;
+
     @FXML private TableView<Membre> tableMembres;
     @FXML private TableColumn<Membre, Integer> colId;
-    @FXML private TableColumn<Membre, String>    colNom;
-    @FXML private TableColumn<Membre, String>    colPrenom;
-    @FXML private TableColumn<Membre, String>    colEmail;
-    @FXML private TableColumn<Membre, String>    colTelephone;
+    @FXML private TableColumn<Membre, String> colNom;
+    @FXML private TableColumn<Membre, String> colPrenom;
+    @FXML private TableColumn<Membre, String> colEmail;
+    @FXML private TableColumn<Membre, String> colTelephone;
     @FXML private TableColumn<Membre, LocalDate> colDateFin;
-    @FXML private TableColumn<Membre, String>    colStatut;
+    @FXML private TableColumn<Membre, String> colStatut;
 
-    // --- AJOUTS POUR LA RECHERCHE ---
+    // ---- RECHERCHE ----
     @FXML private TextField champRecherche;
     @FXML private Button btnLancerRecherche;
     private String critereActuel = "";
-    // --------------------------------
 
     private MembreDAO membreDAO = new MembreDAO();
     private ObservableList<Membre> listeMembres = FXCollections.observableArrayList();
 
-    // ---- Initialisation automatique ----
+    // ---- INIT ----
     @FXML
     public void initialize() {
-        // Lier colonnes aux propriétés du modèle
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
@@ -53,81 +56,26 @@ public class MembreController {
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         colDateFin.setCellValueFactory(new PropertyValueFactory<>("dateFin"));
 
-        // Colonne statut calculée dynamiquement
         colStatut.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
-                        data.getValue().getStatutAbonnement()
-                )
+                new SimpleStringProperty(data.getValue().getStatutAbonnement())
         );
 
-        // --- AJOUT : CACHER LA RECHERCHE AU DÉPART ---
-        if(champRecherche != null) {
+        // cacher recherche au début
+        if (champRecherche != null) {
             champRecherche.setVisible(false);
             champRecherche.setManaged(false);
         }
-        if(btnLancerRecherche != null) {
+        if (btnLancerRecherche != null) {
             btnLancerRecherche.setVisible(false);
             btnLancerRecherche.setManaged(false);
         }
-        // ---------------------------------------------
 
-        // Remplir le tableau au démarrage
         chargerMembres();
-
-        // Clic sur une ligne => remplir les champs
-        tableMembres.setOnMouseClicked(event -> remplirChampsDepuisSelection());
+        tableMembres.setOnMouseClicked(e -> remplirChampsDepuisSelection());
     }
 
-    // --- AJOUTS : MÉTHODES DE RECHERCHE DYNAMIQUE ---
-    @FXML
-    public void choisirRechercheNom() {
-        this.critereActuel = "Nom";
-        preparerInterfaceRecherche();
-    }
+    // ---- CRUD ----
 
-    @FXML
-    public void choisirRecherchePrenom() {
-        this.critereActuel = "Prénom";
-        preparerInterfaceRecherche();
-    }
-
-    @FXML
-    public void choisirRechercheAbonnement() {
-        this.critereActuel = "Abonnement";
-        preparerInterfaceRecherche();
-        champRecherche.setPromptText("Taper 'Valide' ou 'Expiré'...");
-    }
-
-    private void preparerInterfaceRecherche() {
-        champRecherche.clear();
-        champRecherche.setPromptText("Saisir " + critereActuel + "...");
-        champRecherche.setVisible(true);
-        champRecherche.setManaged(true);
-        btnLancerRecherche.setVisible(true);
-        btnLancerRecherche.setManaged(true);
-        champRecherche.requestFocus();
-    }
-
-    @FXML
-    public void rechercherMembres() {
-        String motCle = champRecherche.getText().trim();
-        if (motCle.isEmpty()) {
-            chargerMembres();
-            return;
-        }
-        try {
-            // Utilisation de la méthode créée dans MembreDAO
-            List<Membre> resultats = membreDAO.rechercherMembreParCritere(critereActuel, motCle);
-            listeMembres.setAll(resultats);
-            tableMembres.setItems(listeMembres);
-            labelStatut.setText(resultats.isEmpty() ? "Aucun résultat." : resultats.size() + " trouvé(s).");
-        } catch (SQLException e) {
-            labelStatut.setText(" Erreur recherche : " + e.getMessage());
-        }
-    }
-    // ------------------------------------------------
-
-    // ---- Charger la liste depuis la base ----
     @FXML
     public void chargerMembres() {
         try {
@@ -136,11 +84,10 @@ public class MembreController {
             tableMembres.setItems(listeMembres);
             labelStatut.setText(membres.size() + " membre(s) chargé(s).");
         } catch (SQLException e) {
-            labelStatut.setText(" Erreur : " + e.getMessage());
+            labelStatut.setText("Erreur : " + e.getMessage());
         }
     }
 
-    // ---- Ajouter un membre ----
     @FXML
     public void ajouterMembre() {
         if (!validerChamps()) return;
@@ -158,66 +105,155 @@ public class MembreController {
             membreDAO.ajouterMembre(m);
             chargerMembres();
             viderChamps();
-            labelStatut.setText(" Membre ajouté avec succès.");
+            labelStatut.setText("Membre ajouté.");
         } catch (SQLException e) {
-            labelStatut.setText(" Erreur ajout : " + e.getMessage());
+            labelStatut.setText("Erreur ajout.");
         }
     }
 
-    // ---- Modifier un membre sélectionné ----
     @FXML
     public void modifierMembre() {
-        Membre selectionne = tableMembres.getSelectionModel().getSelectedItem();
-        if (selectionne == null) {
-            labelStatut.setText(" Veuillez sélectionner un membre à modifier.");
+        Membre m = tableMembres.getSelectionModel().getSelectedItem();
+        if (m == null) {
+            labelStatut.setText("Sélectionnez un membre.");
             return;
         }
+
         if (!validerChamps()) return;
 
-        selectionne.setNom(champNom.getText().trim());
-        selectionne.setPrenom(champPrenom.getText().trim());
-        selectionne.setEmail(champEmail.getText().trim());
-        selectionne.setTelephone(champTelephone.getText().trim());
-        selectionne.setDateDebut(champDateDebut.getValue());
-        selectionne.setDateFin(champDateFin.getValue());
+        m.setNom(champNom.getText().trim());
+        m.setPrenom(champPrenom.getText().trim());
+        m.setEmail(champEmail.getText().trim());
+        m.setTelephone(champTelephone.getText().trim());
+        m.setDateDebut(champDateDebut.getValue());
+        m.setDateFin(champDateFin.getValue());
 
         try {
-            membreDAO.modifierMembre(selectionne);
+            membreDAO.modifierMembre(m);
             chargerMembres();
             viderChamps();
-            labelStatut.setText("Membre modifié avec succès.");
+            labelStatut.setText("Membre modifié.");
         } catch (SQLException e) {
-            labelStatut.setText("Erreur modification : " + e.getMessage());
+            labelStatut.setText("Erreur modification.");
         }
     }
 
-    // ---- Supprimer un membre ----
     @FXML
     public void supprimerMembre() {
-        Membre selectionne = tableMembres.getSelectionModel().getSelectedItem();
-        if (selectionne == null) {
-            labelStatut.setText("Veuillez sélectionner un membre à supprimer.");
+        Membre m = tableMembres.getSelectionModel().getSelectedItem();
+        if (m == null) {
+            labelStatut.setText("Sélectionnez un membre.");
             return;
         }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Supprimer " + selectionne.getPrenom() + " " + selectionne.getNom() + " ?",
+                "Supprimer " + m.getPrenom() + " " + m.getNom() + " ?",
                 ButtonType.YES, ButtonType.NO);
+
         confirm.showAndWait();
 
         if (confirm.getResult() == ButtonType.YES) {
             try {
-                membreDAO.supprimerMembre(selectionne.getId());
+                membreDAO.supprimerMembre(m.getId());
                 chargerMembres();
                 viderChamps();
                 labelStatut.setText("Membre supprimé.");
             } catch (SQLException e) {
-                labelStatut.setText("Erreur suppression : " + e.getMessage());
+                labelStatut.setText("Erreur suppression.");
             }
         }
     }
 
-    // ---- Remplir les champs depuis la ligne sélectionnée ----
+    // ---- RECHERCHE ----
+
+    @FXML
+    public void choisirRechercheNom() {
+        critereActuel = "Nom";
+        preparerRecherche();
+    }
+
+    @FXML
+    public void choisirRecherchePrenom() {
+        critereActuel = "Prénom";
+        preparerRecherche();
+    }
+
+    @FXML
+    public void choisirRechercheAbonnement() {
+        critereActuel = "Abonnement";
+        preparerRecherche();
+        champRecherche.setPromptText("Valide ou Expiré");
+    }
+
+    private void preparerRecherche() {
+        champRecherche.clear();
+        champRecherche.setVisible(true);
+        champRecherche.setManaged(true);
+        btnLancerRecherche.setVisible(true);
+        btnLancerRecherche.setManaged(true);
+    }
+
+    @FXML
+    public void rechercherMembres() {
+        String motCle = champRecherche.getText().trim();
+
+        if (motCle.isEmpty()) {
+            chargerMembres();
+            return;
+        }
+
+        try {
+            List<Membre> res =
+                    membreDAO.rechercherMembreParCritere(critereActuel, motCle);
+
+            listeMembres.setAll(res);
+            tableMembres.setItems(listeMembres);
+
+            labelStatut.setText(
+                    res.isEmpty() ? "Aucun résultat." : res.size() + " trouvé(s)."
+            );
+
+        } catch (SQLException e) {
+            labelStatut.setText("Erreur recherche.");
+        }
+    }
+
+    // ---- PDF ----
+
+    @FXML
+    private void handleImprimerFiche() {
+        Membre m = tableMembres.getSelectionModel().getSelectedItem();
+
+        if (m == null) {
+            labelStatut.setText("Sélectionnez un membre.");
+            return;
+        }
+
+        try {
+            PdfService pdfService = new PdfService();
+            pdfService.genererFicheInscription(
+                    m.getNom(),
+                    m.getPrenom(),
+                    m.getTelephone(),
+                    m.getDateDebut() != null ? m.getDateDebut().toString() : "N/A"
+            );
+
+            String fileName = "Fiche_" + m.getNom() + "_" + m.getPrenom() + ".pdf";
+            File pdfFile = new File(fileName);
+
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+
+            labelStatut.setText("Fiche générée.");
+
+        } catch (Exception e) {
+            labelStatut.setText("Erreur PDF.");
+        }
+    }
+
+    // ---- UI ----
+
     private void remplirChampsDepuisSelection() {
         Membre m = tableMembres.getSelectionModel().getSelectedItem();
         if (m != null) {
@@ -227,11 +263,9 @@ public class MembreController {
             champTelephone.setText(m.getTelephone());
             champDateDebut.setValue(m.getDateDebut());
             champDateFin.setValue(m.getDateFin());
-            labelStatut.setText(m.getStatutAbonnement());
         }
     }
 
-    // ---- Vider les champs ----
     @FXML
     public void viderChamps() {
         champNom.clear();
@@ -240,37 +274,42 @@ public class MembreController {
         champTelephone.clear();
         champDateDebut.setValue(null);
         champDateFin.setValue(null);
-        if(champRecherche != null) {
+
+        if (champRecherche != null) {
             champRecherche.clear();
             champRecherche.setVisible(false);
             champRecherche.setManaged(false);
         }
-        if(btnLancerRecherche != null) {
+
+        if (btnLancerRecherche != null) {
             btnLancerRecherche.setVisible(false);
             btnLancerRecherche.setManaged(false);
         }
+
         tableMembres.getSelectionModel().clearSelection();
     }
 
-    // ---- Validation simple des champs ----
+    // ---- VALIDATION ----
+
     private boolean validerChamps() {
-        if (champNom.getText().trim().isEmpty() ||
-                champPrenom.getText().trim().isEmpty() ||
-                champEmail.getText().trim().isEmpty() ||
+        if (champNom.getText().isEmpty() ||
+                champPrenom.getText().isEmpty() ||
+                champEmail.getText().isEmpty() ||
                 champDateDebut.getValue() == null ||
                 champDateFin.getValue() == null) {
-            labelStatut.setText(" Veuillez remplir tous les champs obligatoires.");
+
+            labelStatut.setText("Remplir tous les champs.");
             return false;
         }
 
         String emailRegex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
-        if (!champEmail.getText().trim().matches(emailRegex)) {
-            labelStatut.setText(" Format email invalide.");
+        if (!champEmail.getText().matches(emailRegex)) {
+            labelStatut.setText("Email invalide.");
             return false;
         }
 
         if (!champDateFin.getValue().isAfter(champDateDebut.getValue())) {
-            labelStatut.setText("La date de fin doit être après la date de début.");
+            labelStatut.setText("Date fin incorrecte.");
             return false;
         }
 

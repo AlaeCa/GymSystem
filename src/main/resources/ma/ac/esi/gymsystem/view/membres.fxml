@@ -49,6 +49,7 @@
         <Button text="Supprimer"  onAction="#supprimerMembre" styleClass="btn-rouge"/>
         <Button text="Actualiser" onAction="#chargerMembres"  styleClass="btn-gris"/>
         <Button text="Vider"      onAction="#viderChamps"     styleClass="btn-gris"/>
+        <Button text="Imprimer Fiche" onAction="#handleImprimerFiche" styleClass="btn-violet"/>
         <MenuButton text="Rechercher par..." styleClass="btn-jaune">
             <items>
                 <MenuItem text="Par Nom"        onAction="#choisirRechercheNom"/>

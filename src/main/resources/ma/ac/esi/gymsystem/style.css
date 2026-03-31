@@ -146,6 +146,16 @@ Button {
     -fx-text-fill: #ffffff;
     -fx-effect: dropshadow(gaussian, #2196f366, 8, 0.4, 0, 0);
 }
+.btn-violet {
+    -fx-background-color: #8E44AD; /* Violet élégant */
+    -fx-text-fill: #90caf9;
+}
+
+.btn-violet:hover {
+    -fx-background-color: #9B59B6;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #2196f366, 8, 0.4, 0, 0);
+}
 .btn-jaune {
     -fx-background-color: #FFD700;
     -fx-text-fill: #90caf9;

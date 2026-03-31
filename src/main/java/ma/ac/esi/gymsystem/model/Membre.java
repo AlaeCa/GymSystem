@@ -1,11 +1,8 @@
 package ma.ac.esi.gymsystem.model;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-/**
- * @author LENOVO
- **/
+
 public class Membre {
 
     private int       id;
@@ -17,10 +14,9 @@ public class Membre {
     private LocalDate dateFin;
     private boolean   actif;
 
-    // ---- Constructeurs ----
+    // Constructeurs
 
     public Membre() {}
-
     public Membre(String nom, String prenom, String email,
                   String telephone, LocalDate dateDebut, LocalDate dateFin) {
         this.nom       = nom;
@@ -32,26 +28,17 @@ public class Membre {
         this.actif     = true;
     }
 
-    // ---- Méthodes métier avec java.time ----
+    //Méthodes métier avec java.time
 
-    /**
-     * Vérifie si l'abonnement est encore valide aujourd'hui.
-     */
-    public boolean estAbonnementValide() {
+    public boolean estAbonnementValide() {    //Vérifie si l'abonnement est encore valide aujourd'hui.
         LocalDate today = LocalDate.now();
         return !today.isAfter(dateFin) && !today.isBefore(dateDebut);
     }
-
-    /**
-     * Retourne le nombre de jours restants avant expiration.
-     */
+                                //Retourne le nombre de jours restants avant expiration.
     public long joursRestants() {
         return ChronoUnit.DAYS.between(LocalDate.now(), dateFin);
     }
-
-    /**
-     * Retourne le statut lisible de l'abonnement.
-     */
+                                //Retourne le statut lisible de l'abonnement.
     public String getStatutAbonnement() {
         if (estAbonnementValide()) {
             return "✅ Valide (" + joursRestants() + " jours restants)";
@@ -60,7 +47,7 @@ public class Membre {
         }
     }
 
-    // ---- Getters & Setters ----
+    //Getters & Setters
 
     public int getId()                        { return id; }
     public void setId(int id)                 { this.id = id; }
